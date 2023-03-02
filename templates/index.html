@@ -22,7 +22,7 @@ Check list
         <h1>test</h1>
         <div class="row row-cols-1 row-cols-md-3">
             <h1>test</h1>
-            <template x-for="task in Task">
+            <template x-for="task in tasks">
                 <h1>test</h1>
                 <div class="col">
                     <div class="card h-100 bg-light-green">
@@ -55,7 +55,7 @@ Check list
         newDescription: '',
         newUrgency: '',
         tasks: [
-            {% for task in Task %}
+            {% for task in tasks %}
             {'title': '{{ task.title }}', 'id': '{{ task.id }}', 'description': '{{ task.description }}', 'urgency': '{{ task.urgency }}'}
             {% endfor %}
         ]
