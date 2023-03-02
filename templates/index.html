@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}
+Check list
+{% endblock %}
+
+{% block content %}
+
+<div x-data="getTasks()">
+    <h3 class="text-center mt-5 bg-light-green">All Tasks<span>{{ request.user.username }}</span></h3>
+<form id = "task-form">
+    {% csrf_token %}
+</form>
+<div class="container pt-5">
+    <div class="input-group px-5">
+        <input x-model="newTask" class="form-control" placeholder="Task's name">
+        <input x-model="newDescription" class="form-control" placeholder="Task's description">
+        <input x-model="newUrgency" class="form-control" placeholder="Task's urgency">
+        <button @click="addTask(newTask, newDescription, newUrgency)" type="button" class="btn btn-primary"><i class="uil uil-tasks">Add task</i></button>
+    </div>
+    <div class="card-group p-5">
+        <h1>test</h1>
+        <div class="row row-cols-1 row-cols-md-3">
+            <h1>test</h1>
+            <template x-for="task in tasks">
+                <h1>test</h1>
+                <div class="col">
+                    <div class="card h-100 bg-light-green">
+                        <div class="card-header">
+                            <h4 class = "card-title text-center my-2"><a x-text="task.title" x-bind:href="'/task/'+task.id"></a></h4>
+                        </div>
+                        <div class="card-body">
+                            <p x-text = "task.description" class="card-text pt-3"></p>
+                            <p x-text = "task.urgency" class="card-text pt-3"></p>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary btn-sm">
+                            <a x-bind:href="'/task/'+task.id">Open task</a>
+                            </button>
+                            <button @click="removeTask(task.id)" class="btn btn-danger btn-sm float-end"><i class="uil uil-trash">Delete</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
+
+</div>
+<script>
+    const getTasks = () => {
+    return{
+        newTask: '',
+        newDescription: '',
+        newUrgency: '',
+        tasks: [
+            {% for task in tasks %}
+            {'title': '{{ task.title }}', 'id': '{{ task.id }}', 'description': '{{ task.description }}', 'urgency': '{{ task.urgency }}'}
+            {% endfor %}
+        ]
+    }
+};
+
+const csrfToken = document.querySelector('#task-form > input').value;
+const addTask = async (title, description, urgency) => {
+    try{
+    const result = await axios.post('/api/task', {title, description, urgency}, {headers: {"X-CSRFToken": csrfToken}});
+    location.reload();
+    }
+    catch (e) {console.error(e)}
+};
+
+
+const removeTask = async taskId => {
+    try{
+        const result = await axios.delete('/api/task/'+taskId, {headers: {"X-CSRFToken": csrfToken}});
+        location.reload();
+    }
+    catch (e) {console.error(e)}
+};
+</script>
+{% endblock %}
