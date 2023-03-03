@@ -29,15 +29,6 @@ def update_task(request, task_id: int, payload: TaskUpd):
     return {"Success": True}
 
 
-# @api.put("/tasks/{task_id}", tags=['Tasks'])
-# def update_task(request, task_id: int, payload: TaskIn):
-#     task = get_object_or_404(Task, id=task_id)
-#     for atr, value in payload.dict().items():
-#         setattr(task, atr, value)
-#     task.save()
-#     return {"Success": True}
-
-
 @api.delete("/task/{task_id}", tags=['Tasks'])
 def delete_task(request, task_id: int):
     task = get_object_or_404(Task, id=task_id)
